@@ -1,11 +1,29 @@
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { routes } from "./routes/route";
+import { createElement } from "react";
 
 function App() {
 
+  const router = createBrowserRouter(
+    routes.map((route) => ({
+    ...route,
+    element: createElement(route.element),
+    children: route.children?.map((child) => ({
+       ...child,
+       element: createElement(child.element),
+    })),
+  }))
+);
+
   return (
     <>
-      <h1 class='bg-red-500'>Vite + React</h1>
+        <RouterProvider router={router} />
     </>
   )
+
 }
 
 export default App
