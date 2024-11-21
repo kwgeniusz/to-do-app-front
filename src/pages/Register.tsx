@@ -3,6 +3,7 @@ import InputLabel from "../components/input/InputLabel";
 import Button from "../components/button/Button";
 import * as Yup from 'yup';
 import { Api } from "../services/Api";
+import { Link } from "react-router-dom";
 
 const Register = () => {
 
@@ -99,6 +100,10 @@ const Register = () => {
                     value="Registrame"
                     type="submit"
                   />
+
+                  <p className="test-sm font-light text-gray-500 dark:text-gray-400">
+                    Tienes una cuenta <Link to="/login" className="font-medium text-indigo-600 hover:underline dark:text-indigo-400">Iniciar Sesion</Link>
+                  </p>
                 </form>
               )}
             </Formik>
