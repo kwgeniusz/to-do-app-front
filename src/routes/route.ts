@@ -30,7 +30,10 @@ export const routes: TypeRoute[] = [
         element: BaseDashboard,
         isProtected: true,
         children: [
-            { path: "tasks", element: Tasks },
+            {  
+              path: '',
+              element: Tasks
+            },
         ],
     },
 ];
