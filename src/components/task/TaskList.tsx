@@ -26,7 +26,7 @@ const TaskList = () => {
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-semibold">My Tasks</h3>
+      <h3 className="text-lg font-semibold">Mis Tareas</h3>
       <ul>
         {tasks.map((task) => (
           // Pasamos handleDeleteTask como prop a TaskItem para actualizar la lista después de eliminar una tarea
