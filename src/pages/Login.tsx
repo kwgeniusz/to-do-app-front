@@ -2,11 +2,25 @@
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputLabel from '../components/input/InputLabel';
-import { Api } from '../services/Api';
 import Button from '../components/button/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../store';
+import { loginUser } from '../store/authSlice';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 const Login = () => {
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLogin } = useSelector((state: RootState) => state.auth)
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/dashboard");
+    }
+  }, [isLogin])
 
   const initialValues = {
     email: '',
@@ -24,9 +38,18 @@ const Login = () => {
   })
 
   const onSubmit = (values: typeof initialValues) => {
-    console.log(values)
-    Api.post('/auth/login', values).then((response) => {
-      console.log(response)
+    dispatch(loginUser(values)).then((response) => {
+      if (response.type === "auth/loginUser/fulfilled") {
+        navigate("/dashboard");
+      }else{
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Usuario o contrasena incorrecto',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
     });
   };
 
@@ -79,7 +102,7 @@ const Login = () => {
 
                   <p className="test-sm font-light text-gray-500 dark:text-gray-400">
                     No tienes una cuenta <Link to="/register" className="font-medium text-indigo-600 hover:underline dark:text-indigo-400">
-                       Crear Cuenta
+                      Crear Cuenta
                     </Link>
                   </p>
                 </form>

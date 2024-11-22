@@ -5,7 +5,14 @@ import Register from "../pages/Register";
 import Tasks from "../pages/Tasks";
 import Welcome from "../pages/Welcome";
 
-export const routes = [
+type TypeRoute = {
+    path: string;
+    element: any;
+    isProtected?: boolean;
+    children?: TypeRoute[];
+}
+
+export const routes: TypeRoute[] = [
     {
         path: '/',
         element: Welcome
@@ -21,11 +28,9 @@ export const routes = [
     {
         path: '/dashboard',
         element: BaseDashboard,
+        isProtected: true,
         children: [
-            {  
-              path: '',
-              element: Tasks
-            },
+            { path: "tasks", element: Tasks },
         ],
     },
 ];

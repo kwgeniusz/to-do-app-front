@@ -1,11 +1,15 @@
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import InputLabel from "../components/input/InputLabel";
 import Button from "../components/button/Button";
 import * as Yup from 'yup';
-import { Api } from "../services/Api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from "../store";
+import { registerUser } from "../store/authSlice";
 
 const Register = () => {
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const initialValues = {
     name: '',
@@ -28,12 +32,28 @@ const Register = () => {
       .required("La confirmacion de la contrasena es requerida"),
   })
 
-  const onSubmit = (values: typeof initialValues) => {
-    console.log(values)
-    Api.post('/auth/register', values).then((response) =>{
-      console.log(response)
-    });
-  };
+const onSubmit = (
+  values: typeof initialValues,
+  { setFieldError }: FormikHelpers<typeof initialValues>
+) => {
+  dispatch(registerUser(values)).then((response) => {
+    console.log(response.type)
+    if (response.type === "auth/registerUser/fulfilled") {
+      console.log("Registro exitoso:", response.payload); // Confirmación por consola
+      navigate("/dashboard"); // Redirige al dashboard
+    } else {
+      console.error("Error al registrarse:", response.payload); // Imprime errores en consola
+
+      // Maneja errores del backend (como email duplicado)
+      if (response.payload && response.payload.errors) {
+        Object.entries(response.payload.errors).forEach(([key, value]) => {
+          setFieldError(key, value[0]); // Establece el error en el campo correspondiente
+        });
+      }
+    }
+  });
+};
+
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
